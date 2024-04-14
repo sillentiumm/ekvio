@@ -1,10 +1,10 @@
 
 <template>
-  <form class="form" action="">
+  <div class="form">
     <h3 class="form-title">{{ title }}</h3>
     <div>
       <label 
-        v-if="!fileComputed" for="input-file"
+        v-if="!imageName" for="input-file"
         tabindex="0" @keydown.space.prevent="openFileDialog" @keydown.enter.prevent="openFileDialog"
         class="custom-file-upload" :class="{notActive: !active}"
       >
@@ -13,7 +13,7 @@
       <button v-else  @click="clearImg" class="custom-file-upload">
         Удалить файл
       </button>
-      <span v-if="fileComputed" class="form-file-name"> {{ fileComputed }}</span>
+      <span v-if="imageName" class="form-file-name"> {{ imageName }}</span>
       <span v-else class="form-file-name form-file-name-none">Файл не выбран</span>
       <input 
         type="file" id="input-file" ref="fileInput"
@@ -23,11 +23,11 @@
       {{ hint }}
     </span>
     <span v-else class="form-footer error"> Error message</span>
-  </form>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { defineEmits, ref, computed } from 'vue'
+import { defineEmits, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
@@ -52,11 +52,6 @@ const rules = {
 }
 const v$ = useVuelidate(rules,{
   imageName
-})
-
-const fileComputed = computed(() => {
-  if(imageName.value) return imageName.value
-  return false
 })
 
 const downloadImg = (event: Event) => {
@@ -95,7 +90,6 @@ const openFileDialog = () => {
 </script>
 
 <style scoped>
-
 .form {
   position: relative;
   width: 318px;
